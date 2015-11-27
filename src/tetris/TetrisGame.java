@@ -37,7 +37,7 @@ public class TetrisGame {
         tBoard = board;
         relatives = relative('T');
         piece1.get(0).moveToTetrisLocation(5, 10);
-        piece1.get(0).moveToTetrisLocation(3, 2);
+        piece1.get(0).moveToTetrisLocation(5, 0);
 
         this.tetrisApp = tetrisApp;
         // You can use this to show the score, etc.
@@ -72,7 +72,6 @@ public class TetrisGame {
      * Move the current tetris piece left.
      */
     void left() {
-        System.out.println("left key was pressed!");
         Point2D[] newpiece = new Point2D[4];
         // move the piece to the new location to read it into the array
         piece1.get(0).moveToTetrisLocation(piece1.get(0).getX() - 1, piece1.get(0).getY());
@@ -91,7 +90,6 @@ public class TetrisGame {
      * Move the current tetris piece right.
      */
     void right() {
-        System.out.println("right key was pressed!");
         // create a new piece with what the new location would be
         Point2D[] newpiece = new Point2D[4];
         // move the piece to the new location to read it into the array
@@ -130,7 +128,6 @@ public class TetrisGame {
             }
 
         }
-        System.out.println("drop key was pressed!");
     }
 
     /**
@@ -154,13 +151,10 @@ public class TetrisGame {
             int x = (int) (piece1.get(0).getX() + (oldCoords[i - 1].getX()));
             int y = (int) (piece1.get(0).getY() + (oldCoords[i - 1].getY()));
             newpiece[i] = new Point2D(x, y);
-            System.out.println(piece1.get(i).getX() + ", " + piece1.get(i).getY());
-            System.out.println(newpiece[i]);
         }
 
         // now we pass the info to commit loc flagged as a rotation move
         commitLoc(checkSquare(newpiece), oldCoords, 'r');
-        System.out.println("rotate right key was pressed!");
 
 
     }
@@ -185,16 +179,11 @@ public class TetrisGame {
         for (int i = 1; i <= 3; i++) {
             int x = (int) (piece1.get(0).getX() + (oldCoords2[i - 1].getX()));
             int y = (int) (piece1.get(0).getY() + (oldCoords2[i - 1].getY()));
-            System.out.println(x + " | " + y);
             newpiece2[i] = new Point2D(x, y);
-            System.out.println(piece1.get(i).getX() + ", " + piece1.get(i).getY());
-            System.out.println(newpiece2[i]);
-            System.out.println(oldCoords2[i - 1]);
         }
 
         // now we pass the info to commit loc flagged as a rotation move
         commitLoc(checkSquare(newpiece2), oldCoords2, 'r');
-        System.out.println("rotate let key was pressed!");
 
     }
 
@@ -202,7 +191,6 @@ public class TetrisGame {
         // First, check if move is blocke by a square
         for (Point2D sq : newSqs) {
                 if(TetrisBoard.pieces.get((int)sq.getY()).get((int)sq.getX()) != null){
-                    System.out.println("abc123");
                     return false;
             }
             // then, check it it's blocked by the sides of the game board
@@ -227,19 +215,16 @@ public class TetrisGame {
         // if the piece is being moved left/right
         if (moveType == 'm') {
             if (avail) {
-                System.out.println("flag");
                 // newSqs represents the coordinates of the new location
                 // we simply move the center to wherever the center of the new piece is
                 piece1.get(0).moveToTetrisLocation((int) newSqs[0].getX(), (int) newSqs[0].getY());
                 return 1;
             } else {
-                System.out.println("Not avail");
                 return 0;
             }
         } else if (moveType == 'r') {
             // if it's a rotates
             if (avail) {
-                System.out.println("flag");
                 // newSqs represents what the new relative locations are
                 for (int i = 1; i <= 3; i++) {
                     // so we have to update the relatives field
@@ -250,7 +235,6 @@ public class TetrisGame {
                 }
                 return 1;
             } else {
-                System.out.println("not avail");
                 return 0;
             }
 
@@ -376,7 +360,7 @@ public class TetrisGame {
         for (int i = 0; i < 4; i++) {
             piece.add(new TetrisSquare(board));
         }
-        piece.get(0).moveToTetrisLocation(3, 2);
+        piece.get(0).moveToTetrisLocation(5, 0);
         piece.get(1).xProperty().bind(piece.get(0).xProperty().subtract(1));
         piece.get(1).yProperty().bind(piece.get(0).yProperty());
         piece.get(2).xProperty().bind(piece.get(0).xProperty().subtract(1));
@@ -392,7 +376,7 @@ public class TetrisGame {
         for (int i = 0; i < 4; i++) {
             piece.add(new TetrisSquare(board));
         }
-        piece.get(0).moveToTetrisLocation(3, 2);
+        piece.get(0).moveToTetrisLocation(5, 0);
         piece.get(1).xProperty().bind(piece.get(0).xProperty().subtract(1));
         piece.get(1).yProperty().bind(piece.get(0).yProperty().subtract(1));
         piece.get(2).xProperty().bind(piece.get(0).xProperty());
@@ -408,7 +392,7 @@ public class TetrisGame {
         for (int i = 0; i < 4; i++) {
             piece.add(new TetrisSquare(board));
         }
-        piece.get(0).moveToTetrisLocation(3, 2);
+        piece.get(0).moveToTetrisLocation(5, 0);
         piece.get(1).xProperty().bind(piece.get(0).xProperty().add(1));
         piece.get(1).yProperty().bind(piece.get(0).yProperty().subtract(1));
         piece.get(2).xProperty().bind(piece.get(0).xProperty());
@@ -425,7 +409,7 @@ public class TetrisGame {
         for (int i = 0; i < 4; i++) {
             piece.add(new TetrisSquare(board));
         }
-        piece.get(0).moveToTetrisLocation(3, 2);
+        piece.get(0).moveToTetrisLocation(5, 0);
         piece.get(1).xProperty().bind(piece.get(0).xProperty().subtract(1));
         piece.get(1).yProperty().bind(piece.get(0).yProperty().subtract(1));
         piece.get(2).xProperty().bind(piece.get(0).xProperty());
@@ -441,7 +425,7 @@ public class TetrisGame {
         for (int i = 0; i < 4; i++) {
             piece.add(new TetrisSquare(board));
         }
-        piece.get(0).moveToTetrisLocation(3, 2);
+        piece.get(0).moveToTetrisLocation(5, 0);
         piece.get(1).xProperty().bind(piece.get(0).xProperty().subtract(1));
         piece.get(1).yProperty().bind(piece.get(0).yProperty());
         piece.get(2).xProperty().bind(piece.get(0).xProperty());
@@ -457,7 +441,7 @@ public class TetrisGame {
         for (int i = 0; i < 4; i++) {
             piece.add(new TetrisSquare(board));
         }
-        piece.get(0).moveToTetrisLocation(3, 2);
+        piece.get(0).moveToTetrisLocation(5, 0);
         piece.get(1).xProperty().bind(piece.get(0).xProperty().subtract(1));
         piece.get(1).yProperty().bind(piece.get(0).yProperty());
         piece.get(2).xProperty().bind(piece.get(0).xProperty().add(1));

@@ -23,7 +23,7 @@ import javafx.util.Duration;
  */
 public class Tetris extends Application {
 
-    private static final double MILLISEC = 200;
+    private static final double MILLISEC = 400;
     private TetrisGame game;
     public TetrisBoard tetrisBoard;
     private Timeline animation;

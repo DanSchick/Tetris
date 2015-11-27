@@ -15,10 +15,10 @@ import java.util.ArrayList;
  */
 public class TetrisBoard extends Pane{
     // The size of the side of a tetris square
-    public static final int SQUARE_SIZE = 20;
+    public static final int SQUARE_SIZE = 40;
     // The number of squares that fit on the screen in the x and y dimensions
-    public static final int X_DIM_SQUARES = 20;
-    public static final int Y_DIM_SQUARES = 45;
+    public static final int X_DIM_SQUARES = 10;
+    public static final int Y_DIM_SQUARES = 20;
     // create the list that will hold  all pieces on the board
     public static ArrayList<ArrayList<TetrisSquare>> pieces = new ArrayList<ArrayList<TetrisSquare>>();
 
@@ -31,8 +31,8 @@ public class TetrisBoard extends Pane{
         this.setPrefHeight(Y_DIM_SQUARES*SQUARE_SIZE);
         this.setPrefWidth(X_DIM_SQUARES*SQUARE_SIZE);
         for(int i=0;i<=Y_DIM_SQUARES;i++){
-            pieces.add(new ArrayList<TetrisSquare>(X_DIM_SQUARES));
-                for(int j=0;j<=X_DIM_SQUARES;j++){
+            pieces.add(new ArrayList<TetrisSquare>(X_DIM_SQUARES+1));
+                for(int j=0;j<=X_DIM_SQUARES-1;j++){
                     pieces.get(i).add(j, null);
                 }
             System.out.println(pieces.get(i));
@@ -42,7 +42,21 @@ public class TetrisBoard extends Pane{
 	    System.out.println("sentinel");
 	    for(TetrisSquare sq : squares){
             pieces.get(sq.getY()).set(sq.getX(), sq);
+            System.out.println(pieces.get(sq.getY()));
 	    }
+        for(int i=0; i<=Y_DIM_SQUARES;i++){
+            if(!pieces.get(i).contains(null)){
+                for(int j=0;j<=X_DIM_SQUARES-1;j++){
+                    pieces.get(i).get(j).removeFromDrawing();
+                    pieces.get(i).remove(j);
+                    pieces.get(i).add(j, null);
+                    //TODO: Move all pieces down when row is removed
+                }
+
+
+            }
+
+        }
     }
 
 }
