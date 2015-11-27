@@ -61,33 +61,9 @@ public class TetrisGame {
         piece1.get(0).moveToTetrisLocation(piece1.get(0).getX(), piece1.get(0).getY() - 1);
         if(commitLoc(checkSquare(newpiece), newpiece, 'm') == 0){
             // we need to move the piece to TetrisBoard and create a new piece
-
+            TetrisBoard.addPiece(piece1);
             // Create new random piece
-            int rand = (int)(Math.random() * 8);
-            if(rand == 0){
-                piece1 = createI(tBoard);
-                relatives = relative('I');
-            } else if(rand == 1){
-                piece1 = createJ(tBoard);
-                relatives = relative('J');
-            } else if(rand == 2){
-                piece1 = createL(tBoard);
-                relatives = relative('L');
-            } else if(rand == 3){
-                piece1 = createO(tBoard);
-                relatives = relative('O');
-            } else if(rand == 4){
-                piece1 = createS(tBoard);
-                relatives = relative('S');
-            } else if(rand == 5){
-                piece1 = createT(tBoard);
-                relatives = relative('T');
-            } else if(rand == 6){
-                piece1 = createZ(tBoard);
-                relatives = relative('Z');
-            }
-
-
+            newPiece();
         }
 
     }
@@ -136,7 +112,24 @@ public class TetrisGame {
      * Drop the current tetris piece.
      */
     void drop() {
-        TetrisBoard.addPiece(piece1);
+        while(true){
+            piece1.get(0).moveToTetrisLocation(piece1.get(0).getX(), piece1.get(0).getY() + 1);
+            Point2D[] newpiece = new Point2D[4];
+            // move the piece to the new location to read it into the array
+            newpiece[0] = new Point2D(piece1.get(0).getX(), piece1.get(0).getY());
+            for (int i = 1; i <= 3; i++) {
+                int x = (int) (piece1.get(0).getX() + (relatives[i - 1].getX()));
+                int y = (int) (piece1.get(0).getY() + (relatives[i - 1].getY()));
+                newpiece[i] = new Point2D(x, y);
+            }
+            piece1.get(0).moveToTetrisLocation(piece1.get(0).getX(), piece1.get(0).getY() - 1);
+            if(commitLoc(checkSquare(newpiece), newpiece, 'm') == 0){
+                TetrisBoard.addPiece(piece1);
+                newPiece();
+                break;
+            }
+
+        }
         System.out.println("drop key was pressed!");
     }
 
@@ -275,6 +268,32 @@ public class TetrisGame {
      * @param board
      * @return the arraylist of squares that makes the piece
      */
+    void newPiece(){
+        // Create new random piece
+        int rand = (int)(Math.random() * 8);
+        if(rand == 0){
+            piece1 = createI(tBoard);
+            relatives = relative('I');
+        } else if(rand == 1){
+            piece1 = createJ(tBoard);
+            relatives = relative('J');
+        } else if(rand == 2){
+            piece1 = createL(tBoard);
+            relatives = relative('L');
+        } else if(rand == 3){
+            piece1 = createO(tBoard);
+            relatives = relative('O');
+        } else if(rand == 4){
+            piece1 = createS(tBoard);
+            relatives = relative('S');
+        } else if(rand == 5){
+            piece1 = createT(tBoard);
+            relatives = relative('T');
+        } else if(rand == 6){
+            piece1 = createZ(tBoard);
+            relatives = relative('Z');
+        }
+    }
     ArrayList<TetrisSquare> createI(TetrisBoard board) {
         ArrayList<TetrisSquare> piece = new ArrayList<TetrisSquare>();
         for (int i = 0; i < 4; i++) {
