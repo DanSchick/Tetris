@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 /**
@@ -53,7 +54,7 @@ public class Tetris extends Application {
         
         statusLabel = new Label("Tetris");
         statusLabel.setTextFill(Color.RED);
-        
+
         BorderPane pane = new BorderPane();
         pane.setCenter(tetrisBoard);
         pane.setTop(statusLabel);

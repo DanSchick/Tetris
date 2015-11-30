@@ -35,25 +35,35 @@ public class TetrisBoard extends Pane{
                 for(int j=0;j<=X_DIM_SQUARES-1;j++){
                     pieces.get(i).add(j, null);
                 }
-            System.out.println(pieces.get(i));
         }
     }
     public static void addPiece(ArrayList<TetrisSquare> squares){
-	    System.out.println("sentinel");
 	    for(TetrisSquare sq : squares){
             pieces.get(sq.getY()).set(sq.getX(), sq);
-            System.out.println(pieces.get(sq.getY()));
 	    }
         for(int i=0; i<=Y_DIM_SQUARES;i++){
             if(!pieces.get(i).contains(null)){
                 for(int j=0;j<=X_DIM_SQUARES-1;j++){
                     pieces.get(i).get(j).removeFromDrawing();
-                    pieces.get(i).remove(j);
-                    pieces.get(i).add(j, null);
                     //TODO: Move all pieces down when row is removed
                 }
-
-
+                for(int k=0;k<i;k++){
+                    for(TetrisSquare sq : pieces.get(k)){
+                        if(sq != null){
+                            sq.moveToTetrisLocation(sq.getX(), sq.getY() + 1);
+                        }
+                    }
+                }
+                System.out.println(pieces.get(i-2));
+                pieces.remove(i);
+//                for(int p=i+1;i<Y_DIM_SQUARES-2;p++){
+//                    pieces.set(p-1, pieces.get(p));
+//                }
+                pieces.add(0, new ArrayList<TetrisSquare>(X_DIM_SQUARES+1));
+                System.out.println(pieces.get(i-1));
+                for(int l=0;l<=X_DIM_SQUARES-1;l++){
+                    pieces.get(0).add(l, null);
+                }
             }
 
         }

@@ -6,8 +6,8 @@
 package tetris;
 
 import javafx.scene.paint.Color;
-
 import java.util.*;
+import java.util.stream.IntStream;
 
 import javafx.geometry.Point2D;
 
@@ -20,6 +20,7 @@ public class TetrisGame {
 
     private final Tetris tetrisApp;
     public ArrayList<TetrisSquare> piece1;
+    public ArrayList<TetrisSquare> ghost;
     private TetrisBoard tBoard;
     public Point2D relatives[] = new Point2D[3];
 
@@ -33,11 +34,13 @@ public class TetrisGame {
      */
     public TetrisGame(Tetris tetrisApp, TetrisBoard board) {
         // change createI to createZ or createO to change pieces
-        piece1 = createT(board);
+        ghost = new ArrayList<TetrisSquare>();
+//        for(int i=0;i<4;i++){
+//            ghost.add(new TetrisSquare(board));
+//        }
         tBoard = board;
+        newPiece();
         relatives = relative('T');
-        piece1.get(0).moveToTetrisLocation(5, 10);
-        piece1.get(0).moveToTetrisLocation(5, 0);
 
         this.tetrisApp = tetrisApp;
         // You can use this to show the score, etc.
@@ -218,6 +221,29 @@ public class TetrisGame {
                 // newSqs represents the coordinates of the new location
                 // we simply move the center to wherever the center of the new piece is
                 piece1.get(0).moveToTetrisLocation((int) newSqs[0].getX(), (int) newSqs[0].getY());
+//                while(true){
+//                    ghost.get(0).moveToTetrisLocation(ghost.get(0).getX(), ghost.get(0).getY() + 1);
+//                    Point2D[] newpiece = new Point2D[4];
+//                    // move the piece to the new location to read it into the array
+//                    newpiece[0] = new Point2D(ghost.get(0).getX(), ghost.get(0).getY());
+//                    for (int i = 1; i <= 3; i++) {
+//                        int x = (int) (ghost.get(0).getX() + (relatives[i - 1].getX()));
+//                        int y = (int) (ghost.get(0).getY() + (relatives[i - 1].getY()));
+//                        newpiece[i] = new Point2D(x, y);
+//                    }
+//                    ghost.get(0).moveToTetrisLocation(ghost.get(0).getX(), ghost.get(0).getY() - 1);
+//                    if(checkSquare(newpiece)){
+//                        for(int i=0;i<4;i++){
+//                            ghost.get(i).xProperty().bind(piece1.get(i).xProperty());
+//                            ghost.get(i).yProperty().bind(piece1.get(i).yProperty().add(newpiece[i].getY()-piece1.get(i).getY()));
+//                        }
+//                        break;
+//                    }
+//                    if(checkSquare(newpiece) == false){
+//                        break;
+//                    }
+//                }
+
                 return 1;
             } else {
                 return 0;
@@ -246,15 +272,15 @@ public class TetrisGame {
     /**
      * *********************** PIECE CREATION CODE ****************************
      */
+
+
     /**
-     * Creates a line tetris piece
-     *
-     * @param board
-     * @return the arraylist of squares that makes the piece
+     * Creates a random tetris piece.
      */
     void newPiece(){
         // Create new random piece
-        int rand = (int)(Math.random() * 8);
+        Random random = new Random();
+        int rand = random.nextInt(7);
         if(rand == 0){
             piece1 = createI(tBoard);
             relatives = relative('I');
@@ -277,29 +303,18 @@ public class TetrisGame {
             piece1 = createZ(tBoard);
             relatives = relative('Z');
         }
-    }
-    ArrayList<TetrisSquare> createI(TetrisBoard board) {
-        ArrayList<TetrisSquare> piece = new ArrayList<TetrisSquare>();
-        for (int i = 0; i < 4; i++) {
-            piece.add(new TetrisSquare(board));
-        }
-        piece.get(0).moveToTetrisLocation(2, 3);
-        piece.get(1).xProperty().bind(piece.get(0).xProperty());
-        piece.get(1).yProperty().bind(piece.get(0).yProperty().subtract(1));
-        piece.get(2).xProperty().bind(piece.get(0).xProperty());
-        piece.get(2).yProperty().bind(piece.get(0).yProperty().add(1));
-        piece.get(3).xProperty().bind(piece.get(0).xProperty());
-        piece.get(3).yProperty().bind(piece.get(0).yProperty().add(2));
-        return piece;
+//        for(int i=0;i<4;i++){
+//            ghost.get(i).xProperty().bind(piece1.get(i).xProperty());
+//            ghost.get(i).yProperty().bind(piece1.get(i).yProperty().add(5));
+//        }
+
+
     }
 
+
     /**
-     * At first I tried this method to have a list of all square's relative
-     * to the center. I wasn't able to make it work for more than one
-     * rotation though, I keep it in the source so you can see what I wanted
-     * to do
-     *
-     * @param type
+     * This will return the list of relatives coordinates for the center piece
+     * @param char represents shape. ex. 'T' or 'Z'
      * @return A list of the relative spaces of the 3 non-central squares
      */
     Point2D[] relative(char type) {
@@ -355,10 +370,27 @@ public class TetrisGame {
         return null;
     }
 
+    ArrayList<TetrisSquare> createI(TetrisBoard board) {
+        ArrayList<TetrisSquare> piece = new ArrayList<TetrisSquare>();
+        for (int i = 0; i < 4; i++) {
+            piece.add(new TetrisSquare(board));
+            piece.get(i).setColor(Color.BLUE);
+        }
+        piece.get(0).moveToTetrisLocation(5, 0);
+        piece.get(1).xProperty().bind(piece.get(0).xProperty());
+        piece.get(1).yProperty().bind(piece.get(0).yProperty().subtract(1));
+        piece.get(2).xProperty().bind(piece.get(0).xProperty());
+        piece.get(2).yProperty().bind(piece.get(0).yProperty().add(1));
+        piece.get(3).xProperty().bind(piece.get(0).xProperty());
+        piece.get(3).yProperty().bind(piece.get(0).yProperty().add(2));
+        return piece;
+    }
+
     ArrayList<TetrisSquare> createO(TetrisBoard board) {
         ArrayList<TetrisSquare> piece = new ArrayList<TetrisSquare>();
         for (int i = 0; i < 4; i++) {
             piece.add(new TetrisSquare(board));
+            piece.get(i).setColor(Color.DARKRED);
         }
         piece.get(0).moveToTetrisLocation(5, 0);
         piece.get(1).xProperty().bind(piece.get(0).xProperty().subtract(1));
@@ -375,6 +407,7 @@ public class TetrisGame {
         ArrayList<TetrisSquare> piece = new ArrayList<TetrisSquare>();
         for (int i = 0; i < 4; i++) {
             piece.add(new TetrisSquare(board));
+            piece.get(i).setColor(Color.SEAGREEN);
         }
         piece.get(0).moveToTetrisLocation(5, 0);
         piece.get(1).xProperty().bind(piece.get(0).xProperty().subtract(1));
@@ -391,6 +424,7 @@ public class TetrisGame {
         ArrayList<TetrisSquare> piece = new ArrayList<TetrisSquare>();
         for (int i = 0; i < 4; i++) {
             piece.add(new TetrisSquare(board));
+            piece.get(i).setColor(Color.SADDLEBROWN);
         }
         piece.get(0).moveToTetrisLocation(5, 0);
         piece.get(1).xProperty().bind(piece.get(0).xProperty().add(1));
@@ -408,6 +442,7 @@ public class TetrisGame {
 
         for (int i = 0; i < 4; i++) {
             piece.add(new TetrisSquare(board));
+            piece.get(i).setColor(Color.VIOLET);
         }
         piece.get(0).moveToTetrisLocation(5, 0);
         piece.get(1).xProperty().bind(piece.get(0).xProperty().subtract(1));
@@ -424,6 +459,7 @@ public class TetrisGame {
         ArrayList<TetrisSquare> piece = new ArrayList<TetrisSquare>();
         for (int i = 0; i < 4; i++) {
             piece.add(new TetrisSquare(board));
+            piece.get(i).setColor(Color.MAROON);
         }
         piece.get(0).moveToTetrisLocation(5, 0);
         piece.get(1).xProperty().bind(piece.get(0).xProperty().subtract(1));
@@ -440,6 +476,7 @@ public class TetrisGame {
         ArrayList<TetrisSquare> piece = new ArrayList<TetrisSquare>();
         for (int i = 0; i < 4; i++) {
             piece.add(new TetrisSquare(board));
+            piece.get(i).setColor(Color.KHAKI);
         }
         piece.get(0).moveToTetrisLocation(5, 0);
         piece.get(1).xProperty().bind(piece.get(0).xProperty().subtract(1));

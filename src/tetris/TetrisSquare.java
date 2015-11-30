@@ -107,6 +107,7 @@ public class TetrisSquare {
      */
     public void setColor(Color color) {
         shape.setFill(color);
+        shape.setStroke(Color.BLACK);
     }
 
     /**
