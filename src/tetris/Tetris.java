@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -27,6 +28,7 @@ public class Tetris extends Application {
     private static final double MILLISEC = 400;
     private TetrisGame game;
     public TetrisBoard tetrisBoard;
+    public BorderPane pane;
     private Timeline animation;
     private Label statusLabel;
 
@@ -55,7 +57,7 @@ public class Tetris extends Application {
         statusLabel = new Label("Tetris");
         statusLabel.setTextFill(Color.RED);
 
-        BorderPane pane = new BorderPane();
+        pane = new BorderPane();
         pane.setCenter(tetrisBoard);
         pane.setTop(statusLabel);
 
@@ -138,6 +140,10 @@ public class Tetris extends Application {
      */
     private void resume() {
         animation.play();
+    }
+
+    void getChildren(){
+        System.out.println(pane.getChildren());
     }
 
 }

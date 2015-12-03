@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 /**
  * A Pane in which tetris squares can be displayed.
- * 
  * @author pipWolfe
  */
 public class TetrisBoard extends Pane{
@@ -49,6 +48,7 @@ public class TetrisBoard extends Pane{
                 }
                 for(int k=0;k<i;k++){
                     for(TetrisSquare sq : pieces.get(k)){
+                        System.out.print(sq);
                         if(sq != null){
                             sq.moveToTetrisLocation(sq.getX(), sq.getY() + 1);
                         }
@@ -61,6 +61,7 @@ public class TetrisBoard extends Pane{
 //                }
                 pieces.add(0, new ArrayList<TetrisSquare>(X_DIM_SQUARES+1));
                 System.out.println(pieces.get(i-1));
+                //Tetris.getChildren();
                 for(int l=0;l<=X_DIM_SQUARES-1;l++){
                     pieces.get(0).add(l, null);
                 }

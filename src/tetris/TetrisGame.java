@@ -40,7 +40,6 @@ public class TetrisGame {
 //        }
         tBoard = board;
         newPiece();
-        relatives = relative('T');
 
         this.tetrisApp = tetrisApp;
         // You can use this to show the score, etc.
@@ -221,6 +220,7 @@ public class TetrisGame {
                 // newSqs represents the coordinates of the new location
                 // we simply move the center to wherever the center of the new piece is
                 piece1.get(0).moveToTetrisLocation((int) newSqs[0].getX(), (int) newSqs[0].getY());
+                //TODO: FIX SPOOKY GHOST CODE
 //                while(true){
 //                    ghost.get(0).moveToTetrisLocation(ghost.get(0).getX(), ghost.get(0).getY() + 1);
 //                    Point2D[] newpiece = new Point2D[4];
