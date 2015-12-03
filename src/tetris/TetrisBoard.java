@@ -46,6 +46,7 @@ public class TetrisBoard extends Pane{
                     pieces.get(i).get(j).removeFromDrawing();
                     //TODO: Move all pieces down when row is removed
                 }
+                //TODO: change foreach to an int i loop, the iterator might be interfering with the move method()
                 for(int k=0;k<i;k++){
                     for(TetrisSquare sq : pieces.get(k)){
                         System.out.print(sq);
