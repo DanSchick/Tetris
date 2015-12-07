@@ -281,28 +281,30 @@ public class TetrisGame {
         // Create new random piece
         Random random = new Random();
         int rand = random.nextInt(7);
-        if(rand == 0){
-            piece1 = createI(tBoard);
-            relatives = relative('I');
-        } else if(rand == 1){
-            piece1 = createJ(tBoard);
-            relatives = relative('J');
-        } else if(rand == 2){
-            piece1 = createL(tBoard);
-            relatives = relative('L');
-        } else if(rand == 3){
-            piece1 = createO(tBoard);
-            relatives = relative('O');
-        } else if(rand == 4){
-            piece1 = createS(tBoard);
-            relatives = relative('S');
-        } else if(rand == 5){
-            piece1 = createT(tBoard);
-            relatives = relative('T');
-        } else if(rand == 6){
-            piece1 = createZ(tBoard);
-            relatives = relative('Z');
-        }
+        piece1 = createI(tBoard);
+        relatives = relative('I');
+//        if(rand == 0){
+//            piece1 = createI(tBoard);
+//            relatives = relative('I');
+//        } else if(rand == 1){
+//            piece1 = createJ(tBoard);
+//            relatives = relative('J');
+//        } else if(rand == 2){
+//            piece1 = createL(tBoard);
+//            relatives = relative('L');
+//        } else if(rand == 3){
+//            piece1 = createO(tBoard);
+//            relatives = relative('O');
+//        } else if(rand == 4){
+//            piece1 = createS(tBoard);
+//            relatives = relative('S');
+//        } else if(rand == 5){
+//            piece1 = createT(tBoard);
+//            relatives = relative('T');
+//        } else if(rand == 6){
+//            piece1 = createZ(tBoard);
+//            relatives = relative('Z');
+//        }
 //        for(int i=0;i<4;i++){
 //            ghost.get(i).xProperty().bind(piece1.get(i).xProperty());
 //            ghost.get(i).yProperty().bind(piece1.get(i).yProperty().add(5));
@@ -314,7 +316,7 @@ public class TetrisGame {
 
     /**
      * This will return the list of relatives coordinates for the center piece
-     * @param char represents shape. ex. 'T' or 'Z'
+     * @param type represents shape. ex. 'T' or 'Z'
      * @return A list of the relative spaces of the 3 non-central squares
      */
     Point2D[] relative(char type) {
