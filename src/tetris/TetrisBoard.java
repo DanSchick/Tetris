@@ -6,6 +6,8 @@
 package tetris;
 
 import javafx.scene.layout.Pane;
+
+import javax.sound.midi.SysexMessage;
 import java.util.ArrayList;
 
 /**
@@ -46,12 +48,13 @@ public class TetrisBoard extends Pane{
                 for(TetrisSquare sq : pieces.get(i)){
                     sq.removeFromDrawing();
                 }
+                pieces.get(i).clear();
+                System.out.println(pieces.get(i));
                 for(int k=i-1;k>=0;k--){
+                    System.out.println(pieces.get(k));
                     for(TetrisSquare sq : pieces.get(k)){
                         if(sq != null){
-                            System.out.println(sq.getY());
                             sq.moveToTetrisLocation(sq.getX(), sq.getY() + 1);
-                            System.out.println(sq.getY());
                         }
                     }
                 }
@@ -59,10 +62,11 @@ public class TetrisBoard extends Pane{
 //                for(int p=i+1;i<Y_DIM_SQUARES-2;p++){
 //                    pieces.set(p-1, pieces.get(p));
 //                }
-                System.out.println(pieces.get(i-1));
+
+                System.out.println(pieces.get(i-2));
                 pieces.remove(i);
                 pieces.add(0, new ArrayList<TetrisSquare>(X_DIM_SQUARES+1));
-                System.out.println(pieces.get(i));
+                System.out.println(pieces.get(i-1));
                 //Tetris.getChildren();
                 for(int l=0;l<X_DIM_SQUARES;l++){
                     pieces.get(0).add(l, null);

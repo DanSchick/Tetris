@@ -106,6 +106,9 @@ public class Tetris extends Application {
     private void setUpKeyPresses() {
         tetrisBoard.setOnKeyPressed(e -> {
             switch (e.getCode()) {
+                case W:
+                    game.holdPiece();
+                    break;
                 case LEFT:
                     game.left();
                     break;

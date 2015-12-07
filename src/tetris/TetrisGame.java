@@ -22,6 +22,9 @@ public class TetrisGame {
     public ArrayList<TetrisSquare> piece1;
     public ArrayList<TetrisSquare> ghost;
     private TetrisBoard tBoard;
+    private String curPiece;
+    private String hold;
+    
     public Point2D relatives[] = new Point2D[3];
 
     /**
@@ -63,6 +66,10 @@ public class TetrisGame {
         piece1.get(0).moveToTetrisLocation(piece1.get(0).getX(), piece1.get(0).getY() - 1);
         if(commitLoc(checkSquare(newpiece), newpiece, 'm') == 0){
             // we need to move the piece to TetrisBoard and create a new piece
+            for(TetrisSquare sq : piece1){
+                sq.xProperty().unbind();
+                sq.yProperty().unbind();
+            }
             TetrisBoard.addPiece(piece1);
             // Create new random piece
             newPiece();
@@ -124,6 +131,10 @@ public class TetrisGame {
             }
             piece1.get(0).moveToTetrisLocation(piece1.get(0).getX(), piece1.get(0).getY() - 1);
             if(commitLoc(checkSquare(newpiece), newpiece, 'm') == 0){
+                for(TetrisSquare sq : piece1){
+                    sq.xProperty().unbind();
+                    sq.yProperty().unbind();
+                }
                 TetrisBoard.addPiece(piece1);
                 newPiece();
                 break;
@@ -186,6 +197,49 @@ public class TetrisGame {
 
         // now we pass the info to commit loc flagged as a rotation move
         commitLoc(checkSquare(newpiece2), oldCoords2, 'r');
+
+    }
+
+    void holdPiece(){
+        System.out.println(hold);
+        System.out.println(curPiece);
+        if(hold != null){
+            for(TetrisSquare sq : piece1){
+                sq.xProperty().unbind();
+                sq.yProperty().unbind();
+                sq.removeFromDrawing();
+            }
+
+            relatives = relative(hold.charAt(0));
+            switch(hold){
+                case "I":
+                    piece1 = createI(tBoard);
+                    break;
+                case "O":
+                    piece1 = createO(tBoard);
+                    break;
+                case "L":
+                    piece1 = createL(tBoard);
+                    break;
+                case "J":
+                    piece1 = createJ(tBoard);
+                    break;
+                case "Z":
+                    piece1 = createZ(tBoard);
+                    break;
+                case "S":
+                    piece1 = createS(tBoard);
+                    break;
+                case "T":
+                    piece1 = createT(tBoard);
+                    break;
+            }
+
+            hold = curPiece;
+
+        }
+
+
 
     }
 
@@ -281,34 +335,30 @@ public class TetrisGame {
         // Create new random piece
         Random random = new Random();
         int rand = random.nextInt(7);
-        piece1 = createI(tBoard);
-        relatives = relative('I');
-//        if(rand == 0){
-//            piece1 = createI(tBoard);
-//            relatives = relative('I');
-//        } else if(rand == 1){
-//            piece1 = createJ(tBoard);
-//            relatives = relative('J');
-//        } else if(rand == 2){
-//            piece1 = createL(tBoard);
-//            relatives = relative('L');
-//        } else if(rand == 3){
-//            piece1 = createO(tBoard);
-//            relatives = relative('O');
-//        } else if(rand == 4){
-//            piece1 = createS(tBoard);
-//            relatives = relative('S');
-//        } else if(rand == 5){
-//            piece1 = createT(tBoard);
-//            relatives = relative('T');
-//        } else if(rand == 6){
-//            piece1 = createZ(tBoard);
-//            relatives = relative('Z');
-//        }
-//        for(int i=0;i<4;i++){
-//            ghost.get(i).xProperty().bind(piece1.get(i).xProperty());
-//            ghost.get(i).yProperty().bind(piece1.get(i).yProperty().add(5));
-//        }
+
+        if(rand == 0){
+            piece1 = createI(tBoard);
+            relatives = relative('I');
+        } else if(rand == 1){
+            piece1 = createJ(tBoard);
+            relatives = relative('J');
+        } else if(rand == 2){
+            piece1 = createL(tBoard);
+            relatives = relative('L');
+        } else if(rand == 3){
+            piece1 = createO(tBoard);
+            relatives = relative('O');
+        } else if(rand == 4){
+            piece1 = createS(tBoard);
+            relatives = relative('S');
+        } else if(rand == 5){
+            piece1 = createT(tBoard);
+            relatives = relative('T');
+        } else if(rand == 6){
+            piece1 = createZ(tBoard);
+            relatives = relative('Z');
+        }
+
 
 
     }
@@ -385,6 +435,7 @@ public class TetrisGame {
         piece.get(2).yProperty().bind(piece.get(0).yProperty().add(1));
         piece.get(3).xProperty().bind(piece.get(0).xProperty());
         piece.get(3).yProperty().bind(piece.get(0).yProperty().add(2));
+        curPiece = "I";
         return piece;
     }
 
@@ -401,6 +452,7 @@ public class TetrisGame {
         piece.get(2).yProperty().bind(piece.get(0).yProperty().subtract(1));
         piece.get(3).xProperty().bind(piece.get(0).xProperty());
         piece.get(3).yProperty().bind(piece.get(0).yProperty().subtract(1));
+        curPiece = "O";
 
         return piece;
     }
@@ -411,13 +463,14 @@ public class TetrisGame {
             piece.add(new TetrisSquare(board));
             piece.get(i).setColor(Color.SEAGREEN);
         }
-        piece.get(0).moveToTetrisLocation(5, 0);
+        piece.get(0).moveToTetrisLocation(5, 2);
         piece.get(1).xProperty().bind(piece.get(0).xProperty().subtract(1));
         piece.get(1).yProperty().bind(piece.get(0).yProperty().subtract(1));
         piece.get(2).xProperty().bind(piece.get(0).xProperty());
         piece.get(2).yProperty().bind(piece.get(0).yProperty().subtract(1));
         piece.get(3).xProperty().bind(piece.get(0).xProperty());
         piece.get(3).yProperty().bind(piece.get(0).yProperty().add(1));
+        curPiece = "L";
 
         return piece;
     }
@@ -435,6 +488,7 @@ public class TetrisGame {
         piece.get(2).yProperty().bind(piece.get(0).yProperty().subtract(1));
         piece.get(3).xProperty().bind(piece.get(0).xProperty());
         piece.get(3).yProperty().bind(piece.get(0).yProperty().add(1));
+        curPiece = "J";
 
         return piece;
     }
@@ -453,6 +507,7 @@ public class TetrisGame {
         piece.get(2).yProperty().bind(piece.get(0).yProperty().subtract(1));
         piece.get(3).xProperty().bind(piece.get(0).xProperty().add(1));
         piece.get(3).yProperty().bind(piece.get(0).yProperty());
+        curPiece = "Z";
 
         return piece;
     }
@@ -470,6 +525,7 @@ public class TetrisGame {
         piece.get(2).yProperty().bind(piece.get(0).yProperty().subtract(1));
         piece.get(3).xProperty().bind(piece.get(0).xProperty().add(1));
         piece.get(3).yProperty().bind(piece.get(0).yProperty().subtract(1));
+        curPiece = "S";
 
         return piece;
     }
@@ -487,6 +543,7 @@ public class TetrisGame {
         piece.get(2).yProperty().bind(piece.get(0).yProperty());
         piece.get(3).xProperty().bind(piece.get(0).xProperty());
         piece.get(3).yProperty().bind(piece.get(0).yProperty().add(1));
+        curPiece = "T";
 
         return piece;
     }
