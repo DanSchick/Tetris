@@ -1,13 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package tetris;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -26,6 +24,7 @@ import javafx.util.Duration;
 public class Tetris extends Application {
 
     private static final double MILLISEC = 400;
+    public StringProperty str1 = new SimpleStringProperty();
     private TetrisGame game;
     public TetrisBoard tetrisBoard;
     public BorderPane pane;
@@ -89,9 +88,14 @@ public class Tetris extends Application {
     private void setUpAnimation() {
         // Create a handler
         EventHandler<ActionEvent> eventHandler = (ActionEvent e) -> {
-            this.pause();
-            game.update();
-            this.resume();
+            if(TetrisGame.lose == true) {
+                System.out.println("Game over");
+                this.pause();
+            } else {
+                this.pause();
+                game.update();
+                this.resume();
+            }
         };
         // Create an animation for alternating text
         animation = new Timeline(new KeyFrame(Duration.millis(MILLISEC), eventHandler));

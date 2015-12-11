@@ -40,11 +40,17 @@ public class TetrisBoard extends Pane{
     }
     public static void addPiece(ArrayList<TetrisSquare> squares){
 	    for(TetrisSquare sq : squares){
+            if(sq.getY() <= 0){
+                TetrisGame.lose = true;
+            }
             pieces.get(sq.getY()).set(sq.getX(), sq);
 	    }
 
         for(int i=0; i<Y_DIM_SQUARES;i++){
             if(!pieces.get(i).contains(null)){
+                TetrisGame.score += 10;
+                TetrisGame.tetrisApp.setMessage("Held Piece:                   Score: " + TetrisGame.score + "        Press W to hold a piece! ");
+
                 for(TetrisSquare sq : pieces.get(i)){
                     sq.removeFromDrawing();
                 }
@@ -58,10 +64,6 @@ public class TetrisBoard extends Pane{
                         }
                     }
                 }
-                //System.out.println(pieces.get(i-2));
-//                for(int p=i+1;i<Y_DIM_SQUARES-2;p++){
-//                    pieces.set(p-1, pieces.get(p));
-//                }
 
                 System.out.println(pieces.get(i-2));
                 pieces.remove(i);

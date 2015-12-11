@@ -24,9 +24,10 @@ public class TetrisSquare {
     // The shape for the square
     private Rectangle shape = new Rectangle(0, 0, TetrisBoard.SQUARE_SIZE, TetrisBoard.SQUARE_SIZE);
     // The x location in board coordinates
-    private IntegerProperty tetris_x = new SimpleIntegerProperty();
+    public IntegerProperty tetris_x = new SimpleIntegerProperty();
     // The y location in board coordinates
-    private IntegerProperty tetris_y = new SimpleIntegerProperty();
+    public IntegerProperty tetris_y = new SimpleIntegerProperty();
+    public static int sq_size = TetrisBoard.SQUARE_SIZE;
     private final TetrisBoard board;
     
     /**
@@ -109,6 +110,7 @@ public class TetrisSquare {
         shape.setFill(color);
         shape.setStroke(Color.BLACK);
     }
+
 
     /**
      * Removes the square from the TetrisBoard's Pane.

@@ -18,12 +18,15 @@ import javafx.geometry.Point2D;
  */
 public class TetrisGame {
 
-    private final Tetris tetrisApp;
+    public static Tetris tetrisApp;
+    public static int score = 0;
     public ArrayList<TetrisSquare> piece1;
     public ArrayList<TetrisSquare> ghost;
+    public static boolean lose = false;
     private TetrisBoard tBoard;
+    public ArrayList<TetrisSquare> heldPiece;
     private String curPiece;
-    private String hold;
+    private String hold = "b";
     
     public Point2D relatives[] = new Point2D[3];
 
@@ -46,7 +49,7 @@ public class TetrisGame {
 
         this.tetrisApp = tetrisApp;
         // You can use this to show the score, etc.
-        tetrisApp.setMessage("Alright let's do this");
+        tetrisApp.setMessage("Held Piece:                   Score: " + score + "        Press W to hold a piece! ");
     }
 
     /**
@@ -70,7 +73,23 @@ public class TetrisGame {
                 sq.xProperty().unbind();
                 sq.yProperty().unbind();
             }
-            TetrisBoard.addPiece(piece1);
+            try {
+                TetrisBoard.addPiece(piece1);
+            } catch (ArrayIndexOutOfBoundsException e){
+                for(int i=0;i<=TetrisBoard.pieces.size()-1;i++){
+                    for(TetrisSquare sq : TetrisBoard.pieces.get(i)){
+                        if(sq != null) {
+                            sq.setColor(Color.GRAY);
+                        }
+                    }
+                }
+                for(TetrisSquare sq : piece1){
+                    sq.setColor(Color.GRAY);
+                }
+                System.out.println("game over");
+                tetrisApp.setMessage("Game over");
+                lose = true;
+            }
             // Create new random piece
             newPiece();
         }
@@ -135,7 +154,23 @@ public class TetrisGame {
                     sq.xProperty().unbind();
                     sq.yProperty().unbind();
                 }
-                TetrisBoard.addPiece(piece1);
+                try {
+                    TetrisBoard.addPiece(piece1);
+                } catch (ArrayIndexOutOfBoundsException e){
+                    for(int i=0;i<=TetrisBoard.pieces.size()-1;i++){
+                        for(TetrisSquare sq : TetrisBoard.pieces.get(i)){
+                            if(sq != null) {
+                                sq.setColor(Color.GRAY);
+                            }
+                        }
+                    }
+                    for(TetrisSquare sq : piece1){
+                        sq.setColor(Color.GRAY);
+                    }
+                    System.out.println("game over");
+                    tetrisApp.setMessage("Game over!         Your score was " + score);
+                    lose = true;
+                }
                 newPiece();
                 break;
             }
@@ -200,18 +235,35 @@ public class TetrisGame {
 
     }
 
+    /**
+     * Pressing W will make the game 'trade' the current piece for a new one.
+     * The window displays what piece is being held gray in the upper-left corner
+     * Pressing W again will trade the current piece for the held piece
+     */
     void holdPiece(){
         System.out.println(hold);
         System.out.println(curPiece);
-        if(hold != null){
-            for(TetrisSquare sq : piece1){
+        String oldCur = curPiece;
+
+        for (TetrisSquare sq : piece1) {
+            sq.xProperty().unbind();
+            sq.yProperty().unbind();
+            sq.removeFromDrawing();
+        }
+
+        if(hold.equals("b")) {
+            System.out.println("flag");
+            hold = curPiece;
+            newPiece();
+        } else {
+            for (TetrisSquare sq : heldPiece) {
                 sq.xProperty().unbind();
                 sq.yProperty().unbind();
                 sq.removeFromDrawing();
             }
 
             relatives = relative(hold.charAt(0));
-            switch(hold){
+            switch (hold) {
                 case "I":
                     piece1 = createI(tBoard);
                     break;
@@ -234,15 +286,42 @@ public class TetrisGame {
                     piece1 = createT(tBoard);
                     break;
             }
-
-            hold = curPiece;
-
+            hold = oldCur;
+        } switch (hold) {
+            case "I":
+                heldPiece = createI(tBoard);
+                break;
+            case "O":
+                heldPiece = createO(tBoard);
+                break;
+            case "L":
+                heldPiece = createL(tBoard);
+                break;
+            case "J":
+                heldPiece = createJ(tBoard);
+                break;
+            case "Z":
+                heldPiece = createZ(tBoard);
+                break;
+            case "S":
+                heldPiece = createS(tBoard);
+                break;
+            case "T":
+                heldPiece = createT(tBoard);
+                break;
         }
-
-
+        heldPiece.get(0).moveToTetrisLocation(1, 1);
+        for (TetrisSquare sq : heldPiece) {
+            sq.setColor(Color.GRAY);
+        }
 
     }
 
+    /**
+     * This function checks if a certain square is available to move to
+     * @param newSqs a Point2D list of the new coordinates of every square
+     * @return True if the square is available
+     */
     public boolean checkSquare(Point2D[] newSqs) {
         // First, check if move is blocke by a square
         for (Point2D sq : newSqs) {
@@ -261,7 +340,6 @@ public class TetrisGame {
 
     /**
      * Moves the piece if the new location is available.
-     *
      * @param avail    Is the return of checkSquare. If it's false, we don't do anything.
      * @param newSqs   Is an array that we use to move the piece. Different depending on a move or rotate change
      * @param moveType Is the type of movement made. 'm' is left/right, 'r' is rotate left/right
@@ -274,29 +352,6 @@ public class TetrisGame {
                 // newSqs represents the coordinates of the new location
                 // we simply move the center to wherever the center of the new piece is
                 piece1.get(0).moveToTetrisLocation((int) newSqs[0].getX(), (int) newSqs[0].getY());
-                //TODO: FIX SPOOKY GHOST CODE
-//                while(true){
-//                    ghost.get(0).moveToTetrisLocation(ghost.get(0).getX(), ghost.get(0).getY() + 1);
-//                    Point2D[] newpiece = new Point2D[4];
-//                    // move the piece to the new location to read it into the array
-//                    newpiece[0] = new Point2D(ghost.get(0).getX(), ghost.get(0).getY());
-//                    for (int i = 1; i <= 3; i++) {
-//                        int x = (int) (ghost.get(0).getX() + (relatives[i - 1].getX()));
-//                        int y = (int) (ghost.get(0).getY() + (relatives[i - 1].getY()));
-//                        newpiece[i] = new Point2D(x, y);
-//                    }
-//                    ghost.get(0).moveToTetrisLocation(ghost.get(0).getX(), ghost.get(0).getY() - 1);
-//                    if(checkSquare(newpiece)){
-//                        for(int i=0;i<4;i++){
-//                            ghost.get(i).xProperty().bind(piece1.get(i).xProperty());
-//                            ghost.get(i).yProperty().bind(piece1.get(i).yProperty().add(newpiece[i].getY()-piece1.get(i).getY()));
-//                        }
-//                        break;
-//                    }
-//                    if(checkSquare(newpiece) == false){
-//                        break;
-//                    }
-//                }
 
                 return 1;
             } else {
@@ -422,6 +477,11 @@ public class TetrisGame {
         return null;
     }
 
+    /**
+     * Returns a certain tetris piece
+     * @param board
+     * @return ArrayList of bound tetrisSquares
+     */
     ArrayList<TetrisSquare> createI(TetrisBoard board) {
         ArrayList<TetrisSquare> piece = new ArrayList<TetrisSquare>();
         for (int i = 0; i < 4; i++) {
@@ -439,6 +499,11 @@ public class TetrisGame {
         return piece;
     }
 
+    /**
+     * Returns a certain tetris piece
+     * @param board
+     * @return ArrayList of bound tetrisSquares
+     */
     ArrayList<TetrisSquare> createO(TetrisBoard board) {
         ArrayList<TetrisSquare> piece = new ArrayList<TetrisSquare>();
         for (int i = 0; i < 4; i++) {
@@ -457,6 +522,11 @@ public class TetrisGame {
         return piece;
     }
 
+    /**
+     * Returns a certain tetris piece
+     * @param board
+     * @return ArrayList of bound tetrisSquares
+     */
     ArrayList<TetrisSquare> createL(TetrisBoard board) {
         ArrayList<TetrisSquare> piece = new ArrayList<TetrisSquare>();
         for (int i = 0; i < 4; i++) {
@@ -475,6 +545,11 @@ public class TetrisGame {
         return piece;
     }
 
+    /**
+     * Returns a certain tetris piece
+     * @param board
+     * @return ArrayList of bound tetrisSquares
+     */
     ArrayList<TetrisSquare> createJ(TetrisBoard board) {
         ArrayList<TetrisSquare> piece = new ArrayList<TetrisSquare>();
         for (int i = 0; i < 4; i++) {
@@ -493,6 +568,11 @@ public class TetrisGame {
         return piece;
     }
 
+    /**
+     * Returns a certain tetris piece
+     * @param board
+     * @return ArrayList of bound tetrisSquares
+     */
     ArrayList<TetrisSquare> createZ(TetrisBoard board) {
         ArrayList<TetrisSquare> piece = new ArrayList<TetrisSquare>();
 
@@ -530,6 +610,11 @@ public class TetrisGame {
         return piece;
     }
 
+    /**
+     * Returns a certain tetris piece
+     * @param board
+     * @return ArrayList of bound tetrisSquares
+     */
     ArrayList<TetrisSquare> createT(TetrisBoard board) {
         ArrayList<TetrisSquare> piece = new ArrayList<TetrisSquare>();
         for (int i = 0; i < 4; i++) {
